@@ -1,0 +1,16 @@
+# Muse / Meta AI — target: MUSE （策略组）
+# 从 MSM 现行配置中手写的 13 条 Meta 系域名提取（原指向「人工智能」，其中 muse.ai / meta.ai 此前被靠前的聚合规则集抢先命中）
+payload:
+  - 'DOMAIN-SUFFIX,facebook.com'
+  - 'DOMAIN-SUFFIX,fb.com'
+  - 'DOMAIN-SUFFIX,fbcdn.net'
+  - 'DOMAIN-SUFFIX,meta.com'
+  - 'DOMAIN-SUFFIX,instagram.com'
+  - 'DOMAIN-SUFFIX,muse.ai'
+  - 'DOMAIN-SUFFIX,meta.ai'
+  - 'DOMAIN-SUFFIX,facebook.net'
+  - 'DOMAIN-SUFFIX,fbsbx.com'
+  - 'DOMAIN-SUFFIX,cdninstagram.com'
+  - 'DOMAIN-SUFFIX,whatsapp.net'
+  - 'DOMAIN-SUFFIX,ecto1usercontent.com'
+  - 'DOMAIN-SUFFIX,meta-agents-apps.workers.dev'
