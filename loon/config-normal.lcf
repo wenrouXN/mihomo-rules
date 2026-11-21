@@ -68,6 +68,9 @@
 #     住宅，落位问题就此解决）；苹果=全部家宽→台湾家宽→DIRECT→港/台/日/
 #     新/美自动→家宽节点→兜底；家宽手动=全部家宽→台湾家宽→美国家宽→家宽
 #     节点；台湾/美国手动策略各自把本地区家宽池提为首选、原过滤器次之
+# 18. 苹果手动策略再修正（Smith 定）：直连优先——DIRECT → 美国家宽 → 美国
+#     自动策略 → 台湾家宽 → 全部家宽 → 港/台/日/新自动 → 家宽节点 → 兜底
+#     （国内苹果服务与 CDN 直连本就最顺，海外苹果服务再走美国家宽）
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
 #  - 场景 SSID：HOMEair（共 24 处：23 处场景组 + 1 处 [Host]）
@@ -169,7 +172,7 @@ WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, "HOM
 MUSE手动策略=select, 美国家宽, 台湾家宽, 全部家宽, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 AI手动策略=select, 美国家宽, 美国自动策略, 台湾家宽, 日本自动策略, 新国自动策略, 台湾自动策略, 韩国自动策略, 香港自动策略, 家宽节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 谷歌手动策略=select, 美国家宽, 美国自动策略, 台湾家宽, 日本自动策略, 新国自动策略, 台湾自动策略, 香港自动策略, 韩国自动策略, AI手动策略, 家宽节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
-苹果手动策略=select, 全部家宽, 台湾家宽, DIRECT, 香港自动策略, 台湾自动策略, 日本自动策略, 新国自动策略, 美国自动策略, 家宽节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+苹果手动策略=select, DIRECT, 美国家宽, 美国自动策略, 台湾家宽, 全部家宽, 香港自动策略, 台湾自动策略, 日本自动策略, 新国自动策略, 家宽节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 回家手动策略=select, DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 WARP手动策略=select, 兜底后备策略, WARP节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 香港自动策略=url-test, 香港节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
