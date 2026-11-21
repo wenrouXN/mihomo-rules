@@ -1,0 +1,4 @@
+# 自维护规则层 · 直连（policy=DIRECT）
+# 维护：初雪 —— 你说要直连什么，我改这里，Loon 更新外部资源后生效
+# 格式：一行一条，如 DOMAIN-SUFFIX,example.com
+DOMAIN-SUFFIX,lovcfun.top
