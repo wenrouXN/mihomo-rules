@@ -1,0 +1,183 @@
+# ============================================================
+# Loon 进阶配置 · Smith 定制 fork（初雪维护）
+# 上游：可莉 iKeLee《Loon 进阶配置》2025-11-08 版
+#   源文件：luestr/ProxyResource · Tool/Loon/Lcf/zh-CN/Loon_Advanced_Config_By_iKeLee.lcf
+# 本文件：wenrouXN/proxy-config · loon/config-tvos.lcf
+# 【tvOS 旁路由版】用于家里 Apple TV：电视常驻局域网，Loon 在本机主动分流
+#  （不像手机在家时让位给 MSM），故场景不塌缩、DNS 不走家里 Fake-IP 链，
+#  差异见第 1、6、8 条与文末本机化参数，其余与 Beta 版逐字一致。
+#
+# 与上游的差异（顾问式改动，其余与上游逐字一致，便于日后合并上游更新）：
+#  维护原则：规则一律以「规则集」为单位托管在本仓库 loon/rules/，每集绑定一个策略组；
+#  调整走向只改组的选择、不逐条改规则（与 MSM 的 rule-provider → 策略组 同构）。
+#  1. 新增「家宽」层：家宽节点过滤器 + 家宽手动场景/策略（按 🏠/家宽/住宅 筛选订阅中的住宅节点，
+#     与家里 MSM 的「家宽」组对应；本 tvOS 版场景不塌缩，家宽在本机直接生效）
+#  2. 新增 MUSE 手动场景/策略（成员同为家宽节点），绑定 meta.lsr（Meta 系 15 域名，
+#     与 MSM 的 rules/muse.yaml 及 MUSE 组一一对应，排在上游 AI 规则集之前）
+#  3. X(Twitter) 以 x.lsr 规则集绑定家宽手动场景（与 MSM 一致）
+#  4. [Remote Rule] 最前面接入自维护规则层（优先级高于上游规则集）：
+#     loon/rules/my-reject.lsr、my-direct.lsr、my-proxy.lsr
+#  5. [General] 打开 IPv6：ip-mode=dual、ipv6-vif=auto（上游为 v4-only/off，此为改动上游原行）
+#  6. （Beta 版）Tailscale 回家——本 tvOS 版无此项：电视本就在家里，局域网直达；
+#     回家手动策略成员为 DIRECT，home.lsr 照常绑定（效果即局域网直连）；
+#     [General] 不设 include-tun（局域网段由上游 bypass-tun 原生绕过隧道）
+#  7. WARP 层：WARP节点过滤器（按名匹配 Sub-Store 传来的家里 Docker WARP 节点）+ WARP手动
+#     场景/策略 + warp.lsr（YouTube 等，对应 MSM 的 WARP 批）；节点本体不在仓库（在
+#     Sub-Store 里 MSM 用的 cf 订阅中 server 必须是 127.0.0.1（mihomo 有 interface-name
+#     绑定，拨本机局域网 IP 会超时），Loon 专用订阅 cf-loon 中同一节点写 192.168.1.251；
+#     切勿给节点挂 underlying-proxy——mihomo 格式里会变成不存在的 dialer-proxy、旧 Clash
+#     格式里节点会被整条过滤（2026-11-21 踩过，已撤）；Loon 靠下面的代理链回家连它）
+#  8. （Beta 版）WARP 代理链——本 tvOS 版无此项：电视与 WARP 容器同在局域网，
+#     无 [Proxy Chain] 段与 WARP落地策略组；WARP手动策略直接选 WARP节点
+#     （192.168.1.251:1080），兜底后备策略作手动后备
+#  9. 文件头增加本说明
+# 10. [Remote Proxy] 内嵌 Sub-Store 的 loon 集合订阅（家里 1.3:3005，target=Loon；与 MSM
+#     用的 custom 集合同源，仅 WARP 节点换成 cf-loon 的局域网地址版）：在家局域网直拉、
+#     在外经 Tailscale 回家拉；链接含密钥路径且本仓库公开，Smith 知悉风险后决定内嵌
+#
+# 本机化参数（tvOS 版）：
+#  - 无 SSID 参数：全部场景组已去掉「HOMEair=DIRECT」，全网一致不塌缩
+#  - DNS 用公共 DNS（见 [General]），不经家里 MosDNS，避免拿到 28.x Fake-IP
+#  - [Host] 为空（原 SSID DNS 行已移除）
+# ============================================================
+# Loon 进阶配置 - 此配置文件自动选择网络时延最低的代理节点，无需人工干预，所有过程完全自动化。当连接到配备透明代理的路由器时，Loon 将使用“直连”策略，此时所有流量直接通过你的路由器；在其他网络环境中，Loon 将使用自身的“自动分流”模式访问这些网站，从而避免在已使用透明代理路由器时出现双重代理。
+# Date: 2025-11-08 00:21:37
+# Author: https://t.me/iKeLee
+# 更多插件可前往 https://hub.kelee.one 安装
+
+[General]
+ip-mode=dual
+ipv6-vif=auto
+dns-server=223.5.5.5, 8.8.8.8
+sni-sniffing=true
+disable-stun=true
+dns-reject-mode=LoopbackIP
+domain-reject-mode=DNS
+udp-fallback-mode=REJECT
+wifi-access-http-port=7222
+wifi-access-socks5-port=7221
+allow-wifi-access=false
+interface-mode=auto
+test-timeout=5
+disconnect-on-policy-change=false
+internet-test-url=http://connectivitycheck.platform.hicloud.com/generate_204
+proxy-test-url=http://www.gstatic.com/generate_204
+resource-parser=https://raw.githubusercontent.com/sub-store-org/Sub-Store/release/sub-store-parser.loon.min.js
+geoip-url=https://geodata.kelee.one/Country-Masaiki.mmdb
+ipasn-url=https://geodata.kelee.one/GeoLite2-ASN-P3TERX.mmdb
+skip-proxy=192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, localhost, *.local, e.crashlynatics.com
+bypass-tun=10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 192.168.0.0/16, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 255.255.255.255/32
+
+[Proxy]
+
+[Remote Proxy]
+SubStore = http://192.168.1.3:3005/cD7wiTGitLyoBdEguAnFWmqCpHKwhLQh4opXfFhFCEpmY9K7YnPgFu9e2iiUoty2/download/collection/loon?target=Loon, parser-enabled=true, enabled=true
+
+[Remote Filter]
+香港节点=NameRegex, FilterKey="^(?=.*((?i)🇭🇰|香港|(\b(HK|HKG|Hong)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b))).*$"
+台湾节点=NameRegex, FilterKey="^(?=.*((?i)🇹🇼|台湾|(\b(TW|TWN|Tai|Taiwan)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b))).*$"
+日本节点=NameRegex, FilterKey="^(?=.*((?i)🇯🇵|日本|川日|东京|大阪|泉日|埼玉|(\b(JP|JPN|Japan)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b))).*$"
+韩国节点=NameRegex, FilterKey="^(?=.*((?i)🇰🇷|韩国|韓|首尔|(\b(KR|KOR|Korea)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b))).*$"
+新国节点=NameRegex, FilterKey="^(?=.*((?i)🇸🇬|新加坡|狮|(\b(SG|SGP|Singapore)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b))).*$"
+美国节点=NameRegex, FilterKey="^(?=.*((?i)🇺🇸|美国|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|(\b(US|USA|United States)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b))).*$"
+游戏节点=NameRegex, FilterKey="^(?=.*((?i)游戏|🎮|(\b(GAME)(\d+)?\b)))(?!.*((?i)回国|校园)).*$"
+全球节点=NameRegex, FilterKey="^(?=.*(.))(?!.*((?i)群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|超时|收藏|福利|邀请|好友|失联|(\b(USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|Traffic)(\d+)?\b|(\d{4}-\d{2}-\d{2}|\dG)))).*$"
+家宽节点=NameRegex, FilterKey="^(?=.*((?i)🏠|家宽|住宅)).*$"
+WARP节点=NameRegex, FilterKey="^(?=.*((?i)WARP)).*$"
+
+[Proxy Group]
+# --------------------------------
+# 场景策略
+香港手动场景=ssid, default=香港手动策略, cellular=香港手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+台湾手动场景=ssid, default=台湾手动策略, cellular=台湾手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+日本手动场景=ssid, default=日本手动策略, cellular=日本手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+韩国手动场景=ssid, default=韩国手动策略, cellular=韩国手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+新国手动场景=ssid, default=新国手动策略, cellular=新国手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+美国手动场景=ssid, default=美国手动策略, cellular=美国手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+游戏手动场景=ssid, default=游戏手动策略, cellular=游戏手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+全球手动场景=ssid, default=全球手动策略, cellular=全球手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+家宽手动场景=ssid, default=家宽手动策略, cellular=家宽手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+MUSE手动场景=ssid, default=MUSE手动策略, cellular=MUSE手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+回家手动场景=ssid, default=回家手动策略, cellular=回家手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+香港自动场景=ssid, default=香港自动策略, cellular=香港自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+台湾自动场景=ssid, default=台湾自动策略, cellular=台湾自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+日本自动场景=ssid, default=日本自动策略, cellular=日本自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+韩国自动场景=ssid, default=韩国自动策略, cellular=韩国自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+新国自动场景=ssid, default=新国自动策略, cellular=新国自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+美国自动场景=ssid, default=美国自动策略, cellular=美国自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+# --------------------------------
+# 地区策略
+香港手动策略=select, 香港节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
+台湾手动策略=select, 台湾节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png
+日本手动策略=select, 日本节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png
+韩国手动策略=select, 韩国节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/KR.png
+新国手动策略=select, 新国节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png
+美国手动策略=select, 美国节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png
+游戏手动策略=select, 游戏节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/GAME.png
+全球手动策略=select, 全球节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+家宽手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+MUSE手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+回家手动策略=select, DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+WARP手动策略=select, WARP节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+香港自动策略=url-test, 香港节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
+台湾自动策略=url-test, 台湾节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png
+日本自动策略=url-test, 日本节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png
+韩国自动策略=url-test, 韩国节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/KR.png
+新国自动策略=url-test, 新国节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png
+美国自动策略=url-test, 美国节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png
+
+# --------------------------------
+# 兜底策略后备
+兜底后备策略=fallback, 香港自动场景, 台湾自动场景, 日本自动场景, 韩国自动场景, 新国自动场景, 美国自动场景, interval=60, max-timeout=2000, img-url=https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
+
+
+[Rule]
+# 当配置文件中没有任何有效策略组时，Loon将使用内置的PROXY策略组
+# 当配置文件中存在有效的策略组时，内置的PROXY策略组将不再允许被调用，仅可使用用户配置的策略组
+# 配置文件已自带远程GEOIP, cn, DIRECT规则，请勿在此添加
+# 请勿修改远程CN REGION规则的排序甚至删除
+IP-CIDR, 28.0.0.1/8, DIRECT
+IP-CIDR, 198.18.0.1/16, DIRECT
+IP-CIDR, 198.18.0.0/15, DIRECT
+IP-CIDR6, fc00::/18, DIRECT
+FINAL, 兜底后备策略
+
+[Remote Rule]
+# 自维护规则层（初雪维护，优先级最高）
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-reject.lsr, policy=REJECT, tag=My Reject, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-direct.lsr, policy=DIRECT, tag=My Direct, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-proxy.lsr, policy=兜底后备策略, tag=My Proxy, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/meta.lsr, policy=MUSE手动场景, tag=Meta, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/x.lsr, policy=家宽手动场景, tag=X, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/home.lsr, policy=回家手动场景, tag=Home, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/warp.lsr, policy=WARP手动场景, tag=WARP, enabled=true
+https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=新国手动场景, tag=TikTok, enabled=true
+https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=美国手动场景, tag=AI, enabled=true
+https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr, policy=全球手动场景, tag=Speedtest Intl, enabled=true
+https://rule.kelee.one/Loon/Netflix.lsr, policy=新国手动场景, tag=Netflix, enabled=true
+https://kelee.one/Tool/Loon/Lsr/LAN_SPLITTER.lsr, policy=DIRECT, tag=LAN, enabled=true
+https://kelee.one/Tool/Loon/Lsr/REGION_SPLITTER.lsr, policy=DIRECT, tag=CN REGION, enabled=true
+
+[Host]
+
+[Rewrite]
+
+[Script]
+
+[Plugin]
+https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx, pin=true, enabled=true
+https://kelee.one/Tool/Loon/Lpx/BlockAdvertisers.lpx, pin=true, enabled=true
+https://kelee.one/Tool/Loon/Lpx/QuickSearch.lpx, enabled=true
+https://kelee.one/Tool/Loon/Lpx/Prevent_DNS_Leaks.lpx, policy=兜底后备策略, enabled=true
+https://kelee.one/Tool/Loon/Lpx/Node_detection_tool.lpx, enabled=true
+https://kelee.one/Tool/Loon/Lpx/TestFlightRegionUnlock.lpx, policy=DIRECT, enabled=false
+https://kelee.one/Tool/Loon/Lpx/BoxJs.lpx, policy=兜底后备策略, enabled=true
+https://kelee.one/Tool/Loon/Lpx/Sub-Store.lpx, policy=兜底后备策略, enabled=true
+https://kelee.one/Tool/Loon/Lpx/Script-Hub.lpx, policy=兜底后备策略, enabled=true
+
+[Mitm]
+hostname=
+ca-p12=
+ca-passphrase=
+skip-server-cert-verify=false
