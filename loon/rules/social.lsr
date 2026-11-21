@@ -1,0 +1,54 @@
+# 社交规则集（policy=家宽手动场景）
+# 社交平台走住宅出口：这类平台对机房 IP 风控严，与 X 走家宽同理
+# Meta 系（Facebook/Instagram/WhatsApp 等）已在 meta.lsr、X 已在 x.lsr，本集不重复
+# Telegram 域名与 IP 段据 blackmatrix7 的 Telegram 集（2025-09-10 版）；其余为各平台官方域名
+DOMAIN-SUFFIX,telegram.org
+DOMAIN-SUFFIX,telegram.me
+DOMAIN-SUFFIX,telegram.dog
+DOMAIN-SUFFIX,telegram.space
+DOMAIN-SUFFIX,telegram-cdn.org
+DOMAIN-SUFFIX,cdn-telegram.org
+DOMAIN-SUFFIX,t.me
+DOMAIN-SUFFIX,tx.me
+DOMAIN-SUFFIX,telesco.pe
+DOMAIN-SUFFIX,telegra.ph
+DOMAIN-SUFFIX,legra.ph
+DOMAIN-SUFFIX,graph.org
+DOMAIN-SUFFIX,tdesktop.com
+DOMAIN-SUFFIX,telegramdownload.com
+IP-CIDR,91.108.0.0/16
+IP-CIDR,149.154.160.0/20
+IP-CIDR,5.28.192.0/18
+IP-CIDR,109.239.140.0/24
+IP-CIDR6,2001:67c:4e8::/48
+IP-CIDR6,2001:b28:f23c::/47
+IP-CIDR6,2001:b28:f23f::/48
+IP-CIDR6,2a0a:f280::/29
+DOMAIN-SUFFIX,discord.com
+DOMAIN-SUFFIX,discord.gg
+DOMAIN-SUFFIX,discordapp.com
+DOMAIN-SUFFIX,discordapp.net
+DOMAIN-SUFFIX,discord.media
+DOMAIN-SUFFIX,reddit.com
+DOMAIN-SUFFIX,redd.it
+DOMAIN-SUFFIX,redditmedia.com
+DOMAIN-SUFFIX,redditstatic.com
+DOMAIN-SUFFIX,line.me
+DOMAIN-SUFFIX,line-apps.com
+DOMAIN-SUFFIX,line-scdn.net
+DOMAIN-SUFFIX,linkedin.com
+DOMAIN-SUFFIX,licdn.com
+DOMAIN-SUFFIX,snapchat.com
+DOMAIN-SUFFIX,sc-cdn.net
+DOMAIN-SUFFIX,pinterest.com
+DOMAIN-SUFFIX,pinimg.com
+DOMAIN-SUFFIX,tumblr.com
+DOMAIN-SUFFIX,bsky.app
+DOMAIN-SUFFIX,bsky.social
+DOMAIN-SUFFIX,messenger.com
+DOMAIN-SUFFIX,threads.net
+DOMAIN-SUFFIX,threads.com
+DOMAIN-SUFFIX,whatsapp.com
+DOMAIN-SUFFIX,signal.org
+DOMAIN-SUFFIX,vk.com
+DOMAIN-SUFFIX,kakao.com
