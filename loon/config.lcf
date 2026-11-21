@@ -3,6 +3,9 @@
 # 上游：可莉 iKeLee《Loon 进阶配置》2025-11-08 版
 #   源文件：luestr/ProxyResource · Tool/Loon/Lcf/zh-CN/Loon_Advanced_Config_By_iKeLee.lcf
 # 本文件：wenrouXN/proxy-config · loon/config.lcf
+# 【三变体分工】本文件为「Beta 版」（手机 TestFlight 3.5.4+，全功能）；另有
+#  「正常版」loon/config-normal.lcf（App Store 3.5.3 用，无 Tailscale/代理链）与
+#  「tvOS 版」loon/config-tvos.lcf（Apple TV 旁路由）分别维护，三份共享同一骨架。
 #
 # 与上游的差异（顾问式改动，其余与上游逐字一致，便于日后合并上游更新）：
 #  维护原则：规则一律以「规则集」为单位托管在本仓库 loon/rules/，每集绑定一个策略组；
