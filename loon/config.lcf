@@ -15,10 +15,13 @@
 #  4. [Remote Rule] 最前面接入自维护规则层（优先级高于上游规则集）：
 #     loon/rules/my-reject.lsr、my-direct.lsr、my-proxy.lsr
 #  5. [General] 打开 IPv6：ip-mode=dual、ipv6-vif=auto（上游为 v4-only/off，此为改动上游原行）
-#  6. 文件头增加本说明
+#  6. Tailscale 回家：[Proxy] 新增 tailscale 节点（浏览器授权、无密钥），回家手动场景/策略
+#     成员即该节点，home.lsr 绑定之；[General] 新增 include-tun 把 192.168.1.0/24 与
+#     100.64.0.0/10 拉回隧道（比原版 bypass-tun 的排除段更具体/同段优先，上游原行不动）
+#  7. 文件头增加本说明
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
-#  - 场景 SSID：HOMEair（共 17 处：16 处场景组 + 1 处 [Host]）
+#  - 场景 SSID：HOMEair（共 18 处：17 处场景组 + 1 处 [Host]）
 #    连上家里 Wi-Fi 时全部场景塌缩为 DIRECT，流量交给家里网关/MSM
 #  - [Host] 中 HOMEair 的 DNS：192.168.1.2（主网关 RouterOS）
 #    家里 DNS 链：RouterOS(.2) 转发给 MosDNS(.251)，会下发 Fake-IP
@@ -50,8 +53,10 @@ geoip-url=https://geodata.kelee.one/Country-Masaiki.mmdb
 ipasn-url=https://geodata.kelee.one/GeoLite2-ASN-P3TERX.mmdb
 skip-proxy=192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, localhost, *.local, e.crashlynatics.com
 bypass-tun=10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 192.168.0.0/16, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 255.255.255.255/32
+include-tun=192.168.1.0/24, 100.64.0.0/10
 
 [Proxy]
+Tailscale=tailscale, hostname=loon-iphone
 
 [Remote Proxy]
 
@@ -79,6 +84,7 @@ bypass-tun=10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12
 全球手动场景=ssid, default=全球手动策略, cellular=全球手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 家宽手动场景=ssid, default=家宽手动策略, cellular=家宽手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 MUSE手动场景=ssid, default=MUSE手动策略, cellular=MUSE手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+回家手动场景=ssid, default=回家手动策略, cellular=回家手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 香港自动场景=ssid, default=香港自动策略, cellular=香港自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 台湾自动场景=ssid, default=台湾自动策略, cellular=台湾自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 日本自动场景=ssid, default=日本自动策略, cellular=日本自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
@@ -97,6 +103,7 @@ MUSE手动场景=ssid, default=MUSE手动策略, cellular=MUSE手动策略, "HOM
 全球手动策略=select, 全球节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 家宽手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 MUSE手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+回家手动策略=select, Tailscale, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 香港自动策略=url-test, 香港节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
 台湾自动策略=url-test, 台湾节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png
 日本自动策略=url-test, 日本节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png
@@ -126,6 +133,7 @@ https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-direc
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-proxy.lsr, policy=兜底后备策略, tag=My Proxy, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/meta.lsr, policy=MUSE手动场景, tag=Meta, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/x.lsr, policy=家宽手动场景, tag=X, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/home.lsr, policy=回家手动场景, tag=Home, enabled=true
 https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=新国手动场景, tag=TikTok, enabled=true
 https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=美国手动场景, tag=AI, enabled=true
 https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr, policy=全球手动场景, tag=Speedtest Intl, enabled=true
