@@ -1,0 +1,6 @@
+# X (Twitter) 规则集（policy=家宽手动场景）
+# 与 MSM 的手写规则一致：X 拦机房 IP 段，走住宅节点
+DOMAIN-SUFFIX,x.com
+DOMAIN-SUFFIX,twitter.com
+DOMAIN-SUFFIX,twimg.com
+DOMAIN-SUFFIX,t.co
