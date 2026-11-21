@@ -39,8 +39,9 @@
 #     不绑规则集，供手动选用（蜂窝下大流量走它只扣 0.1 倍额度）
 # 12. AI 独立成组 + 社交走家宽：新增 AI手动场景/策略（成员对齐 MSM「人工智能」组：
 #     家宽节点 + 六地区自动策略 + 兜底后备策略），可莉 AI.lsr 改绑 AI手动场景（原绑
-#     美国手动场景）；新增 social.lsr 绑家宽手动场景（Telegram 域名/IP 段、Discord、
-#     Reddit、LINE 等社交平台；Meta 系在 meta.lsr、X 在 x.lsr，不重复）
+#     美国手动场景）；新增 social.lsr 绑家宽手动场景（Discord、Reddit、LINE 等
+#     社交平台；Meta 系在 meta.lsr、X 在 x.lsr，不重复）；Telegram 单独成集
+#     telegram.lsr 绑兜底后备策略（Smith 定：TG 不用家宽，要求没那么高）
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
 #  - 场景 SSID：HOMEair（共 21 处：20 处场景组 + 1 处 [Host]）
@@ -165,6 +166,7 @@ https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-proxy
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/meta.lsr, policy=MUSE手动场景, tag=Meta, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/x.lsr, policy=家宽手动场景, tag=X, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/social.lsr, policy=家宽手动场景, tag=Social, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/telegram.lsr, policy=兜底后备策略, tag=Telegram, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/home.lsr, policy=回家手动场景, tag=Home, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/warp.lsr, policy=WARP手动场景, tag=WARP, enabled=true
 https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=新国手动场景, tag=TikTok, enabled=true
