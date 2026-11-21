@@ -43,9 +43,14 @@
 #     美国手动场景）；新增 social.lsr 绑家宽手动场景（Discord、Reddit、LINE 等
 #     社交平台；Meta 系在 meta.lsr、X 在 x.lsr，不重复）；Telegram 单独成集
 #     telegram.lsr 绑兜底后备策略（Smith 定：TG 不用家宽，要求没那么高）
+# 13. 谷歌、苹果独立成组（可分别选出口）：新增谷歌手动场景/策略（成员对齐 MSM
+#     「谷歌服务」组：美国自动策略打头——MSM 现选美国节点，含家宽节点与 AI手动
+#     策略）+ google.lsr（不收 YouTube 域名，那些在 warp.lsr 走 WARP）；新增苹果
+#     手动场景/策略（成员对齐 MSM「苹果服务」组：家宽节点打头——MSM 现选家宽，
+#     DIRECT 次之便于切直连）+ apple.lsr（不收 icloud.com.cn，国行 iCloud 直连）
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
-#  - 场景 SSID：HOMEair（共 21 处：20 处场景组 + 1 处 [Host]）
+#  - 场景 SSID：HOMEair（共 23 处：22 处场景组 + 1 处 [Host]）
 #    连上家里 Wi-Fi 时全部场景塌缩为 DIRECT，流量交给家里网关/MSM
 #  - [Host] 中 HOMEair 的 DNS：192.168.1.2（主网关 RouterOS）
 #    家里 DNS 链：RouterOS(.2) 转发给 MosDNS(.251)，会下发 Fake-IP
@@ -112,6 +117,8 @@ WARP节点=NameRegex, FilterKey="^(?=.*((?i)WARP)).*$"
 家宽手动场景=ssid, default=家宽手动策略, cellular=家宽手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 MUSE手动场景=ssid, default=MUSE手动策略, cellular=MUSE手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 AI手动场景=ssid, default=AI手动策略, cellular=AI手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+谷歌手动场景=ssid, default=谷歌手动策略, cellular=谷歌手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+苹果手动场景=ssid, default=苹果手动策略, cellular=苹果手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 回家手动场景=ssid, default=回家手动策略, cellular=回家手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 香港自动场景=ssid, default=香港自动策略, cellular=香港自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
@@ -134,6 +141,8 @@ WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, "HOM
 家宽手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 MUSE手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 AI手动策略=select, 家宽节点, 美国自动策略, 日本自动策略, 新国自动策略, 台湾自动策略, 香港自动策略, 韩国自动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+谷歌手动策略=select, 美国自动策略, 家宽节点, 日本自动策略, 新国自动策略, 台湾自动策略, 香港自动策略, 韩国自动策略, AI手动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+苹果手动策略=select, 家宽节点, DIRECT, 香港自动策略, 台湾自动策略, 日本自动策略, 新国自动策略, 美国自动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 回家手动策略=select, Tailscale, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 WARP落地策略=select, WARP节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 WARP手动策略=select, WARP代理链, WARP节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
@@ -172,6 +181,8 @@ https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/meta.lsr
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/x.lsr, policy=家宽手动场景, tag=X, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/social.lsr, policy=家宽手动场景, tag=Social, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/telegram.lsr, policy=兜底后备策略, tag=Telegram, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/google.lsr, policy=谷歌手动场景, tag=Google, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/apple.lsr, policy=苹果手动场景, tag=Apple, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/home.lsr, policy=回家手动场景, tag=Home, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/warp.lsr, policy=WARP手动场景, tag=WARP, enabled=true
 https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=新国手动场景, tag=TikTok, enabled=true
