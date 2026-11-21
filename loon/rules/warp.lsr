@@ -1,0 +1,16 @@
+# WARP 规则集（policy=WARP手动场景）
+# 与 MSM 中走「WARP节点」的规则对应：YouTube + 若干指定域名
+# 出口是家里的 Docker WARP：节点经 Sub-Store 进 Loon，前置代理设为 Tailscale 后在外可用
+DOMAIN-SUFFIX,youtube.com
+DOMAIN-SUFFIX,googlevideo.com
+DOMAIN-SUFFIX,ytimg.com
+DOMAIN-SUFFIX,ggpht.com
+DOMAIN-SUFFIX,youtu.be
+DOMAIN-SUFFIX,youtube-nocookie.com
+DOMAIN-SUFFIX,huangguo.video
+DOMAIN-SUFFIX,tideember.cc
+DOMAIN-SUFFIX,xqjurgek.top
+DOMAIN-SUFFIX,ediayikma.cc
+DOMAIN-SUFFIX,agdkczeyx.cc
+DOMAIN-SUFFIX,lkkwip.cn
+DOMAIN-SUFFIX,zdmhyg.cn
