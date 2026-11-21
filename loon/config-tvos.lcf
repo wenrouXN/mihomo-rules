@@ -60,6 +60,14 @@
 #     （暂 1 个 US11 AT&T）、全部家宽（家宽节点全集 10 个）。日本家宽暂不建组：
 #     节点池里没有日本住宅节点（0 个），空组有风险；过滤器已备好，池里出现
 #     日本 🏠 节点后补建即可
+# 17. 手选组按「家宽 fallback 优先」重排（Smith 定，谷歌为例：默认美国家宽、
+#     再美国自动、其余在后）：谷歌=美国家宽→美国自动→台湾家宽→日/新/台/港/
+#     韩自动→AI手动→家宽节点→兜底；AI=美国家宽→美国自动→台湾家宽→日/新/
+#     台/韩/港自动→家宽节点→兜底（不放全部家宽：其落位序第二位起是港节点，
+#     AI 服务封港 IP）；MUSE=美国家宽→台湾家宽→全部家宽→家宽节点（仍纯
+#     住宅，落位问题就此解决）；苹果=全部家宽→台湾家宽→DIRECT→港/台/日/
+#     新/美自动→家宽节点→兜底；家宽手动=全部家宽→台湾家宽→美国家宽→家宽
+#     节点；台湾/美国手动策略各自把本地区家宽池提为首选、原过滤器次之
 #
 # 本机化参数（tvOS 版）：
 #  - 无 SSID 参数：全部场景组已去掉「HOMEair=DIRECT」，全网一致不塌缩
@@ -145,21 +153,21 @@ WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, img-
 # --------------------------------
 # 地区策略
 香港手动策略=select, 香港节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
-台湾手动策略=select, 台湾节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png
+台湾手动策略=select, 台湾家宽, 台湾节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png
 日本手动策略=select, 日本节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png
 韩国手动策略=select, 韩国节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/KR.png
 新国手动策略=select, 新国节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png
-美国手动策略=select, 美国节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png
+美国手动策略=select, 美国家宽, 美国节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png
 游戏手动策略=select, 游戏节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/GAME.png
 全球手动策略=select, 全球节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
-家宽手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+家宽手动策略=select, 全部家宽, 台湾家宽, 美国家宽, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 台湾家宽=fallback, 台湾家宽节点, interval=60, max-timeout=2000, img-url=https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
 美国家宽=fallback, 美国家宽节点, interval=60, max-timeout=2000, img-url=https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
 全部家宽=fallback, 家宽节点, interval=60, max-timeout=2000, img-url=https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
-MUSE手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
-AI手动策略=select, 家宽节点, 美国自动策略, 日本自动策略, 新国自动策略, 台湾自动策略, 韩国自动策略, 香港自动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
-谷歌手动策略=select, 美国自动策略, 家宽节点, 日本自动策略, 新国自动策略, 台湾自动策略, 香港自动策略, 韩国自动策略, AI手动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
-苹果手动策略=select, 家宽节点, DIRECT, 香港自动策略, 台湾自动策略, 日本自动策略, 新国自动策略, 美国自动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+MUSE手动策略=select, 美国家宽, 台湾家宽, 全部家宽, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+AI手动策略=select, 美国家宽, 美国自动策略, 台湾家宽, 日本自动策略, 新国自动策略, 台湾自动策略, 韩国自动策略, 香港自动策略, 家宽节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+谷歌手动策略=select, 美国家宽, 美国自动策略, 台湾家宽, 日本自动策略, 新国自动策略, 台湾自动策略, 香港自动策略, 韩国自动策略, AI手动策略, 家宽节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+苹果手动策略=select, 全部家宽, 台湾家宽, DIRECT, 香港自动策略, 台湾自动策略, 日本自动策略, 新国自动策略, 美国自动策略, 家宽节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 回家手动策略=select, DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 WARP手动策略=select, WARP节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 香港自动策略=url-test, 香港节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
