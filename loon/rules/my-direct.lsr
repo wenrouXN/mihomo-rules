@@ -2,3 +2,6 @@
 # 维护：初雪 —— 你说要直连什么，我改这里，Loon 更新外部资源后生效
 # 格式：一行一条，如 DOMAIN-SUFFIX,example.com
 DOMAIN-SUFFIX,lovcfun.top
+# 以下 2 条与 MSM 中指向「全球直连」的手写规则对应（2026-11-21 搬入）：
+DOMAIN-SUFFIX,ipv6-test.com
+DOMAIN-SUFFIX,mobaibox.com
