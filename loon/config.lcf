@@ -12,9 +12,11 @@
 #     loon/rules/my-reject.lsr、my-direct.lsr、my-proxy.lsr
 #  4. 文件头增加本说明
 #
-# 占位符（导入后替换，或告诉初雪代为替换）：
-#  - PHICOMM_5G 共 16 处 → 家里 Wi-Fi 名（15 处在场景组、1 处在 [Host]）
-#  - 10.0.0.1 共 1 处 → 家里 DNS/网关地址（[Host] 段）
+# 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
+#  - 场景 SSID：HOMEair（共 16 处：15 处场景组 + 1 处 [Host]）
+#    连上家里 Wi-Fi 时全部场景塌缩为 DIRECT，流量交给家里网关/MSM
+#  - [Host] 中 HOMEair 的 DNS：192.168.1.2（主网关 RouterOS）
+#    家里 DNS 链：RouterOS(.2) 转发给 MosDNS(.251)，会下发 Fake-IP
 # ============================================================
 # Loon 进阶配置 - 此配置文件自动选择网络时延最低的代理节点，无需人工干预，所有过程完全自动化。当连接到配备透明代理的路由器时，Loon 将使用“直连”策略，此时所有流量直接通过你的路由器；在其他网络环境中，Loon 将使用自身的“自动分流”模式访问这些网站，从而避免在已使用透明代理路由器时出现双重代理。
 # Date: 2025-11-08 00:21:37
@@ -62,21 +64,21 @@ bypass-tun=10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12
 [Proxy Group]
 # --------------------------------
 # 场景策略
-香港手动场景=ssid, default=香港手动策略, cellular=香港手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-台湾手动场景=ssid, default=台湾手动策略, cellular=台湾手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-日本手动场景=ssid, default=日本手动策略, cellular=日本手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-韩国手动场景=ssid, default=韩国手动策略, cellular=韩国手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-新国手动场景=ssid, default=新国手动策略, cellular=新国手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-美国手动场景=ssid, default=美国手动策略, cellular=美国手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-游戏手动场景=ssid, default=游戏手动策略, cellular=游戏手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-全球手动场景=ssid, default=全球手动策略, cellular=全球手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-家宽手动场景=ssid, default=家宽手动策略, cellular=家宽手动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-香港自动场景=ssid, default=香港自动策略, cellular=香港自动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-台湾自动场景=ssid, default=台湾自动策略, cellular=台湾自动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-日本自动场景=ssid, default=日本自动策略, cellular=日本自动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-韩国自动场景=ssid, default=韩国自动策略, cellular=韩国自动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-新国自动场景=ssid, default=新国自动策略, cellular=新国自动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
-美国自动场景=ssid, default=美国自动策略, cellular=美国自动策略, "PHICOMM_5G"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+香港手动场景=ssid, default=香港手动策略, cellular=香港手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+台湾手动场景=ssid, default=台湾手动策略, cellular=台湾手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+日本手动场景=ssid, default=日本手动策略, cellular=日本手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+韩国手动场景=ssid, default=韩国手动策略, cellular=韩国手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+新国手动场景=ssid, default=新国手动策略, cellular=新国手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+美国手动场景=ssid, default=美国手动策略, cellular=美国手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+游戏手动场景=ssid, default=游戏手动策略, cellular=游戏手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+全球手动场景=ssid, default=全球手动策略, cellular=全球手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+家宽手动场景=ssid, default=家宽手动策略, cellular=家宽手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+香港自动场景=ssid, default=香港自动策略, cellular=香港自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+台湾自动场景=ssid, default=台湾自动策略, cellular=台湾自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+日本自动场景=ssid, default=日本自动策略, cellular=日本自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+韩国自动场景=ssid, default=韩国自动策略, cellular=韩国自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+新国自动场景=ssid, default=新国自动策略, cellular=新国自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+美国自动场景=ssid, default=美国自动策略, cellular=美国自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 # --------------------------------
 # 地区策略
 香港手动策略=select, 香港节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
@@ -128,7 +130,7 @@ https://kelee.one/Tool/Loon/Lsr/LAN_SPLITTER.lsr, policy=DIRECT, tag=LAN, enable
 https://kelee.one/Tool/Loon/Lsr/REGION_SPLITTER.lsr, policy=DIRECT, tag=CN REGION, enabled=true
 
 [Host]
-ssid: PHICOMM_5G=server: 10.0.0.1
+ssid: HOMEair=server: 192.168.1.2
 
 [Rewrite]
 
