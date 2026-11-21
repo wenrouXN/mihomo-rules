@@ -47,6 +47,11 @@
 #     策略）+ google.lsr（不收 YouTube 域名，那些在 warp.lsr 走 WARP）；新增苹果
 #     手动场景/策略（成员对齐 MSM「苹果服务」组：家宽节点打头——MSM 现选家宽，
 #     DIRECT 次之便于切直连）+ apple.lsr（不收 icloud.com.cn，国行 iCloud 直连）
+# 14. 兜底后备策略重排（Smith 定）：美国省流 → 美国其他 → 新国 → 其他地区。为此
+#     新增「美国省流节点」过滤器（美国∩低倍率、排除 🏠，实测命中 16 个美国 0.1 倍
+#     节点）+ 美国省流自动场景/策略（url-test）；兜底成员依次为美国省流自动场景、
+#     美国自动场景、新国自动场景、香港自动场景、台湾自动场景、日本自动场景、
+#     韩国自动场景（成员仍全是场景，在家第一层即塌缩 DIRECT 交回 MSM）
 #
 # 本机化参数（tvOS 版）：
 #  - 无 SSID 参数：全部场景组已去掉「HOMEair=DIRECT」，全网一致不塌缩
@@ -98,6 +103,7 @@ SubStore = http://192.168.1.3:3005/cD7wiTGitLyoBdEguAnFWmqCpHKwhLQh4opXfFhFCEpmY
 家宽节点=NameRegex, FilterKey="^(?=.*((?i)🏠|家宽|住宅)).*$"
 WARP节点=NameRegex, FilterKey="^(?=.*((?i)WARP)).*$"
 省流节点=NameRegex, FilterKey="^(?=.*((?i)0\.[1-5]|低倍率|省流|大流量))(?!.*🏠).*$"
+美国省流节点=NameRegex, FilterKey="^(?=.*((?i)🇺🇸|美国|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|(\b(US|USA|United States)(\d+)?\b)))(?=.*((?i)0\.[1-5]|低倍率|省流|大流量))(?!.*🏠).*$"
 
 [Proxy Group]
 # --------------------------------
@@ -124,6 +130,7 @@ WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, img-
 新国自动场景=ssid, default=新国自动策略, cellular=新国自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 美国自动场景=ssid, default=美国自动策略, cellular=美国自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 省流自动场景=ssid, default=省流自动策略, cellular=省流自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+美国省流自动场景=ssid, default=美国省流自动策略, cellular=美国省流自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 # --------------------------------
 # 地区策略
 香港手动策略=select, 香港节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
@@ -148,10 +155,11 @@ WARP手动策略=select, WARP节点, 兜底后备策略, img-url=https://raw.git
 新国自动策略=url-test, 新国节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png
 美国自动策略=url-test, 美国节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png
 省流自动策略=url-test, 省流节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+美国省流自动策略=url-test, 美国省流节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 
 # --------------------------------
 # 兜底策略后备
-兜底后备策略=fallback, 香港自动场景, 台湾自动场景, 日本自动场景, 韩国自动场景, 新国自动场景, 美国自动场景, interval=60, max-timeout=2000, img-url=https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
+兜底后备策略=fallback, 美国省流自动场景, 美国自动场景, 新国自动场景, 香港自动场景, 台湾自动场景, 日本自动场景, 韩国自动场景, interval=60, max-timeout=2000, img-url=https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
 
 
 [Rule]
