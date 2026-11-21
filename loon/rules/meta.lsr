@@ -1,0 +1,18 @@
+# Meta / Muse AI 规则集（policy=MUSE手动场景）
+# 与 MSM 的 rules/muse.yaml 一一对应：同一份域名清单，两边同步维护
+# 来源：MSM 手写的 Meta 系域名 + 聚合集独有的 metaaiusercontent.com、metaaivm.com
+DOMAIN-SUFFIX,facebook.com
+DOMAIN-SUFFIX,fb.com
+DOMAIN-SUFFIX,fbcdn.net
+DOMAIN-SUFFIX,meta.com
+DOMAIN-SUFFIX,instagram.com
+DOMAIN-SUFFIX,muse.ai
+DOMAIN-SUFFIX,meta.ai
+DOMAIN-SUFFIX,facebook.net
+DOMAIN-SUFFIX,fbsbx.com
+DOMAIN-SUFFIX,cdninstagram.com
+DOMAIN-SUFFIX,whatsapp.net
+DOMAIN-SUFFIX,ecto1usercontent.com
+DOMAIN-SUFFIX,meta-agents-apps.workers.dev
+DOMAIN-SUFFIX,metaaiusercontent.com
+DOMAIN-SUFFIX,metaaivm.com
