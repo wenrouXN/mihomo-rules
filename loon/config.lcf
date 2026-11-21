@@ -18,10 +18,13 @@
 #  6. Tailscale 回家：[Proxy] 新增 tailscale 节点（浏览器授权、无密钥），回家手动场景/策略
 #     成员即该节点，home.lsr 绑定之；[General] 新增 include-tun 把 192.168.1.0/24 与
 #     100.64.0.0/10 拉回隧道（比原版 bypass-tun 的排除段更具体/同段优先，上游原行不动）
-#  7. 文件头增加本说明
+#  7. WARP 层：WARP节点过滤器（按名匹配 Sub-Store 传来的家里 Docker WARP 节点）+ WARP手动
+#     场景/策略 + warp.lsr（YouTube 等，对应 MSM 的 WARP 批）；节点本体不在仓库，需在
+#     Sub-Store 里给它设 underlying-proxy=Tailscale，在外经 tailnet 回家连它（不开 exit node）
+#  8. 文件头增加本说明
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
-#  - 场景 SSID：HOMEair（共 18 处：17 处场景组 + 1 处 [Host]）
+#  - 场景 SSID：HOMEair（共 19 处：18 处场景组 + 1 处 [Host]）
 #    连上家里 Wi-Fi 时全部场景塌缩为 DIRECT，流量交给家里网关/MSM
 #  - [Host] 中 HOMEair 的 DNS：192.168.1.2（主网关 RouterOS）
 #    家里 DNS 链：RouterOS(.2) 转发给 MosDNS(.251)，会下发 Fake-IP
@@ -70,6 +73,7 @@ Tailscale=tailscale, hostname=loon-iphone
 游戏节点=NameRegex, FilterKey="^(?=.*((?i)游戏|🎮|(\b(GAME)(\d+)?\b)))(?!.*((?i)回国|校园)).*$"
 全球节点=NameRegex, FilterKey="^(?=.*(.))(?!.*((?i)群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|超时|收藏|福利|邀请|好友|失联|(\b(USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|Traffic)(\d+)?\b|(\d{4}-\d{2}-\d{2}|\dG)))).*$"
 家宽节点=NameRegex, FilterKey="^(?=.*((?i)🏠|家宽|住宅)).*$"
+WARP节点=NameRegex, FilterKey="^(?=.*((?i)WARP)).*$"
 
 [Proxy Group]
 # --------------------------------
@@ -85,6 +89,7 @@ Tailscale=tailscale, hostname=loon-iphone
 家宽手动场景=ssid, default=家宽手动策略, cellular=家宽手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 MUSE手动场景=ssid, default=MUSE手动策略, cellular=MUSE手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 回家手动场景=ssid, default=回家手动策略, cellular=回家手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 香港自动场景=ssid, default=香港自动策略, cellular=香港自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 台湾自动场景=ssid, default=台湾自动策略, cellular=台湾自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 日本自动场景=ssid, default=日本自动策略, cellular=日本自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
@@ -104,6 +109,7 @@ MUSE手动场景=ssid, default=MUSE手动策略, cellular=MUSE手动策略, "HOM
 家宽手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 MUSE手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 回家手动策略=select, Tailscale, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+WARP手动策略=select, WARP节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 香港自动策略=url-test, 香港节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
 台湾自动策略=url-test, 台湾节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png
 日本自动策略=url-test, 日本节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png
@@ -134,6 +140,7 @@ https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-proxy
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/meta.lsr, policy=MUSE手动场景, tag=Meta, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/x.lsr, policy=家宽手动场景, tag=X, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/home.lsr, policy=回家手动场景, tag=Home, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/warp.lsr, policy=WARP手动场景, tag=WARP, enabled=true
 https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=新国手动场景, tag=TikTok, enabled=true
 https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=美国手动场景, tag=AI, enabled=true
 https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr, policy=全球手动场景, tag=Speedtest Intl, enabled=true
