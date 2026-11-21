@@ -2,7 +2,7 @@
 # Loon 进阶配置 · Smith 定制 fork（初雪维护）
 # 上游：可莉 iKeLee《Loon 进阶配置》2025-11-08 版
 #   源文件：luestr/ProxyResource · Tool/Loon/Lcf/zh-CN/Loon_Advanced_Config_By_iKeLee.lcf
-# 本文件：wenrouXN/mihomo-rules · loon/config.lcf
+# 本文件：wenrouXN/proxy-config · loon/config.lcf
 #
 # 与上游的差异（顾问式改动，仅此四处，其余与上游逐字一致，便于日后合并上游更新）：
 #  1. 新增「家宽」层：家宽节点过滤器 + 家宽手动场景/策略（按 🏠/家宽/住宅 筛选订阅中的住宅节点，
@@ -117,9 +117,9 @@ FINAL, 兜底后备策略
 
 [Remote Rule]
 # 自维护规则层（初雪维护，优先级最高）
-https://raw.githubusercontent.com/wenrouXN/mihomo-rules/main/loon/rules/my-reject.lsr, policy=REJECT, tag=My Reject, enabled=true
-https://raw.githubusercontent.com/wenrouXN/mihomo-rules/main/loon/rules/my-direct.lsr, policy=DIRECT, tag=My Direct, enabled=true
-https://raw.githubusercontent.com/wenrouXN/mihomo-rules/main/loon/rules/my-proxy.lsr, policy=兜底后备策略, tag=My Proxy, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-reject.lsr, policy=REJECT, tag=My Reject, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-direct.lsr, policy=DIRECT, tag=My Direct, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-proxy.lsr, policy=兜底后备策略, tag=My Proxy, enabled=true
 https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=新国手动场景, tag=TikTok, enabled=true
 https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=美国手动场景, tag=AI, enabled=true
 https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr, policy=全球手动场景, tag=Speedtest Intl, enabled=true
