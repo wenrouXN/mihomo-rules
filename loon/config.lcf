@@ -14,7 +14,8 @@
 #  3. X(Twitter) 以 x.lsr 规则集绑定家宽手动场景（与 MSM 一致）
 #  4. [Remote Rule] 最前面接入自维护规则层（优先级高于上游规则集）：
 #     loon/rules/my-reject.lsr、my-direct.lsr、my-proxy.lsr
-#  5. 文件头增加本说明
+#  5. [General] 打开 IPv6：ip-mode=dual、ipv6-vif=auto（上游为 v4-only/off，此为改动上游原行）
+#  6. 文件头增加本说明
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
 #  - 场景 SSID：HOMEair（共 17 处：16 处场景组 + 1 处 [Host]）
@@ -28,8 +29,8 @@
 # 更多插件可前往 https://hub.kelee.one 安装
 
 [General]
-ip-mode=v4-only
-ipv6-vif=off
+ip-mode=dual
+ipv6-vif=auto
 dns-server=system
 sni-sniffing=true
 disable-stun=true
