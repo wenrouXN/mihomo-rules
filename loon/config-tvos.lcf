@@ -52,6 +52,9 @@
 #     节点）+ 美国省流自动场景/策略（url-test）；兜底成员依次为美国省流自动场景、
 #     美国自动场景、新国自动场景、香港自动场景、台湾自动场景、日本自动场景、
 #     韩国自动场景（成员仍全是场景，在家第一层即塌缩 DIRECT 交回 MSM）
+# 15. AI手动策略地区顺序按风控调整：香港垫底（ChatGPT/Claude/Gemini 均封香港
+#     IP，选了即不可用），韩国提至香港之前；全序为 家宽、美国、日本、新国、
+#     台湾、韩国、香港、兜底后备策略
 #
 # 本机化参数（tvOS 版）：
 #  - 无 SSID 参数：全部场景组已去掉「HOMEair=DIRECT」，全网一致不塌缩
@@ -143,7 +146,7 @@ WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, img-
 全球手动策略=select, 全球节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 家宽手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 MUSE手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
-AI手动策略=select, 家宽节点, 美国自动策略, 日本自动策略, 新国自动策略, 台湾自动策略, 香港自动策略, 韩国自动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+AI手动策略=select, 家宽节点, 美国自动策略, 日本自动策略, 新国自动策略, 台湾自动策略, 韩国自动策略, 香港自动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 谷歌手动策略=select, 美国自动策略, 家宽节点, 日本自动策略, 新国自动策略, 台湾自动策略, 香港自动策略, 韩国自动策略, AI手动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 苹果手动策略=select, 家宽节点, DIRECT, 香港自动策略, 台湾自动策略, 日本自动策略, 新国自动策略, 美国自动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 回家手动策略=select, DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
