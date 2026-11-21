@@ -4,16 +4,20 @@
 #   源文件：luestr/ProxyResource · Tool/Loon/Lcf/zh-CN/Loon_Advanced_Config_By_iKeLee.lcf
 # 本文件：wenrouXN/proxy-config · loon/config.lcf
 #
-# 与上游的差异（顾问式改动，仅此四处，其余与上游逐字一致，便于日后合并上游更新）：
+# 与上游的差异（顾问式改动，其余与上游逐字一致，便于日后合并上游更新）：
+#  维护原则：规则一律以「规则集」为单位托管在本仓库 loon/rules/，每集绑定一个策略组；
+#  调整走向只改组的选择、不逐条改规则（与 MSM 的 rule-provider → 策略组 同构）。
 #  1. 新增「家宽」层：家宽节点过滤器 + 家宽手动场景/策略（按 🏠/家宽/住宅 筛选订阅中的住宅节点，
 #     与家里 MSM 的「家宽」组对应；连上家里 Wi-Fi 时同样塌缩为 DIRECT 交给路由器）
-#  2. X(Twitter) 四个域名在 [Rule] 中指向家宽手动场景（与 MSM 的处理一致）
-#  3. [Remote Rule] 最前面接入自维护规则层（优先级高于上游规则集）：
+#  2. 新增 MUSE 手动场景/策略（成员同为家宽节点），绑定 meta.lsr（Meta 系 15 域名，
+#     与 MSM 的 rules/muse.yaml 及 MUSE 组一一对应，排在上游 AI 规则集之前）
+#  3. X(Twitter) 以 x.lsr 规则集绑定家宽手动场景（与 MSM 一致）
+#  4. [Remote Rule] 最前面接入自维护规则层（优先级高于上游规则集）：
 #     loon/rules/my-reject.lsr、my-direct.lsr、my-proxy.lsr
-#  4. 文件头增加本说明
+#  5. 文件头增加本说明
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
-#  - 场景 SSID：HOMEair（共 16 处：15 处场景组 + 1 处 [Host]）
+#  - 场景 SSID：HOMEair（共 17 处：16 处场景组 + 1 处 [Host]）
 #    连上家里 Wi-Fi 时全部场景塌缩为 DIRECT，流量交给家里网关/MSM
 #  - [Host] 中 HOMEair 的 DNS：192.168.1.2（主网关 RouterOS）
 #    家里 DNS 链：RouterOS(.2) 转发给 MosDNS(.251)，会下发 Fake-IP
@@ -73,6 +77,7 @@ bypass-tun=10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12
 游戏手动场景=ssid, default=游戏手动策略, cellular=游戏手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 全球手动场景=ssid, default=全球手动策略, cellular=全球手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 家宽手动场景=ssid, default=家宽手动策略, cellular=家宽手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+MUSE手动场景=ssid, default=MUSE手动策略, cellular=MUSE手动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 香港自动场景=ssid, default=香港自动策略, cellular=香港自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 台湾自动场景=ssid, default=台湾自动策略, cellular=台湾自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 日本自动场景=ssid, default=日本自动策略, cellular=日本自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
@@ -90,6 +95,7 @@ bypass-tun=10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12
 游戏手动策略=select, 游戏节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/GAME.png
 全球手动策略=select, 全球节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 家宽手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+MUSE手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 香港自动策略=url-test, 香港节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
 台湾自动策略=url-test, 台湾节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png
 日本自动策略=url-test, 日本节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png
@@ -110,11 +116,6 @@ IP-CIDR, 28.0.0.1/8, DIRECT
 IP-CIDR, 198.18.0.1/16, DIRECT
 IP-CIDR, 198.18.0.0/15, DIRECT
 IP-CIDR6, fc00::/18, DIRECT
-# X(Twitter) 走家宽（与 MSM 一致）
-DOMAIN-SUFFIX, x.com, 家宽手动场景
-DOMAIN-SUFFIX, twitter.com, 家宽手动场景
-DOMAIN-SUFFIX, twimg.com, 家宽手动场景
-DOMAIN-SUFFIX, t.co, 家宽手动场景
 FINAL, 兜底后备策略
 
 [Remote Rule]
@@ -122,6 +123,8 @@ FINAL, 兜底后备策略
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-reject.lsr, policy=REJECT, tag=My Reject, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-direct.lsr, policy=DIRECT, tag=My Direct, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-proxy.lsr, policy=兜底后备策略, tag=My Proxy, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/meta.lsr, policy=MUSE手动场景, tag=Meta, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/x.lsr, policy=家宽手动场景, tag=X, enabled=true
 https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=新国手动场景, tag=TikTok, enabled=true
 https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=美国手动场景, tag=AI, enabled=true
 https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr, policy=全球手动场景, tag=Speedtest Intl, enabled=true
