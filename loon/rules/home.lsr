@@ -1,0 +1,6 @@
+# 回家规则集（policy=回家手动场景）
+# 在外经 Loon 内置 Tailscale 节点回家：fnOS 是子网路由器，accept-routes 默认开
+# 在家（HOMEair）时场景塌缩 DIRECT，本集等于直连
+# 100.64.0.0/10 是 tailnet 设备段（MagicDNS 也会自动路由，此为显式兜底）
+IP-CIDR,192.168.1.0/24
+IP-CIDR,100.64.0.0/10
