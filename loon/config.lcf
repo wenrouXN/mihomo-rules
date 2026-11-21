@@ -20,17 +20,18 @@
 #     100.64.0.0/10 拉回隧道（比原版 bypass-tun 的排除段更具体/同段优先，上游原行不动）
 #  7. WARP 层：WARP节点过滤器（按名匹配 Sub-Store 传来的家里 Docker WARP 节点）+ WARP手动
 #     场景/策略 + warp.lsr（YouTube 等，对应 MSM 的 WARP 批）；节点本体不在仓库（在
-#     Sub-Store 的本地订阅 cf 里，server 已改 192.168.1.251；该集合同时是 MSM 的订阅
-#     源，切勿给节点挂 underlying-proxy——在 mihomo 格式里会变成不存在的 dialer-proxy
-#     弄坏 MSM 的 WARP（2026-11-21 踩过，已撤）；Loon 靠下面的代理链回家连它）
+#     Sub-Store 里 MSM 用的 cf 订阅中 server 必须是 127.0.0.1（mihomo 有 interface-name
+#     绑定，拨本机局域网 IP 会超时），Loon 专用订阅 cf-loon 中同一节点写 192.168.1.251；
+#     切勿给节点挂 underlying-proxy——mihomo 格式里会变成不存在的 dialer-proxy、旧 Clash
+#     格式里节点会被整条过滤（2026-11-21 踩过，已撤）；Loon 靠下面的代理链回家连它）
 #  8. WARP 代理链：新增 [Proxy Chain] 段与 WARP落地策略组——链 = Tailscale（第一跳，经
 #     tailnet 回家）→ WARP落地策略（落地，即家里 .251:1080 的 Docker WARP）；WARP手动
 #     策略默认选链、裸 WARP节点 作手动后备；在家（HOMEair）场景塌缩 DIRECT 不走链
 #     （不开 exit node，全流量不从家里出）
 #  9. 文件头增加本说明
-# 10. [Remote Proxy] 内嵌 Sub-Store 集合订阅（家里 1.3:3005 的 custom 集合，target=Loon）：
-#     在家局域网直拉、在外经 Tailscale 回家拉；链接含 Sub-Store 密钥路径且本仓库公开，
-#     Smith 于 2026-11-21 知悉风险后明确决定内嵌，机场订阅不必再在 App 里单独添加
+# 10. [Remote Proxy] 内嵌 Sub-Store 的 loon 集合订阅（家里 1.3:3005，target=Loon；与 MSM
+#     用的 custom 集合同源，仅 WARP 节点换成 cf-loon 的局域网地址版）：在家局域网直拉、
+#     在外经 Tailscale 回家拉；链接含密钥路径且本仓库公开，Smith 知悉风险后决定内嵌
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
 #  - 场景 SSID：HOMEair（共 19 处：18 处场景组 + 1 处 [Host]）
@@ -71,7 +72,7 @@ include-tun=192.168.1.0/24, 100.64.0.0/10
 Tailscale=tailscale, hostname=loon-iphone
 
 [Remote Proxy]
-SubStore = http://192.168.1.3:3005/cD7wiTGitLyoBdEguAnFWmqCpHKwhLQh4opXfFhFCEpmY9K7YnPgFu9e2iiUoty2/download/collection/custom?target=Loon, parser-enabled=true, enabled=true
+SubStore = http://192.168.1.3:3005/cD7wiTGitLyoBdEguAnFWmqCpHKwhLQh4opXfFhFCEpmY9K7YnPgFu9e2iiUoty2/download/collection/loon?target=Loon, parser-enabled=true, enabled=true
 
 [Remote Filter]
 香港节点=NameRegex, FilterKey="^(?=.*((?i)🇭🇰|香港|(\b(HK|HKG|Hong)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b))).*$"
