@@ -37,6 +37,10 @@
 # 11. 新增「省流」层：省流节点过滤器（按 0.1–0.5 倍率/低倍率/省流/大流量 筛选、排除 🏠，
 #     与家里 MSM 的「省流节点」组同一判据）+ 省流自动场景/策略（url-test 自动选最快）；
 #     不绑规则集，供手动选用（蜂窝下大流量走它只扣 0.1 倍额度）
+# 12. AI 独立成组 + 社交走家宽：新增 AI手动场景/策略（成员对齐 MSM「人工智能」组：
+#     家宽节点 + 六地区自动策略 + 兜底后备策略），可莉 AI.lsr 改绑 AI手动场景（原绑
+#     美国手动场景）；新增 social.lsr 绑家宽手动场景（Telegram 域名/IP 段、Discord、
+#     Reddit、LINE 等社交平台；Meta 系在 meta.lsr、X 在 x.lsr，不重复）
 #
 # 本机化参数（tvOS 版）：
 #  - 无 SSID 参数：全部场景组已去掉「HOMEair=DIRECT」，全网一致不塌缩
@@ -102,6 +106,7 @@ WARP节点=NameRegex, FilterKey="^(?=.*((?i)WARP)).*$"
 全球手动场景=ssid, default=全球手动策略, cellular=全球手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 家宽手动场景=ssid, default=家宽手动策略, cellular=家宽手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 MUSE手动场景=ssid, default=MUSE手动策略, cellular=MUSE手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+AI手动场景=ssid, default=AI手动策略, cellular=AI手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 回家手动场景=ssid, default=回家手动策略, cellular=回家手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 香港自动场景=ssid, default=香港自动策略, cellular=香港自动策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
@@ -123,6 +128,7 @@ WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, img-
 全球手动策略=select, 全球节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 家宽手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 MUSE手动策略=select, 家宽节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
+AI手动策略=select, 家宽节点, 美国自动策略, 日本自动策略, 新国自动策略, 台湾自动策略, 香港自动策略, 韩国自动策略, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 回家手动策略=select, DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 WARP手动策略=select, WARP节点, 兜底后备策略, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 香港自动策略=url-test, 香港节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
@@ -156,10 +162,11 @@ https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-direc
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/my-proxy.lsr, policy=兜底后备策略, tag=My Proxy, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/meta.lsr, policy=MUSE手动场景, tag=Meta, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/x.lsr, policy=家宽手动场景, tag=X, enabled=true
+https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/social.lsr, policy=家宽手动场景, tag=Social, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/home.lsr, policy=回家手动场景, tag=Home, enabled=true
 https://raw.githubusercontent.com/wenrouXN/proxy-config/main/loon/rules/warp.lsr, policy=WARP手动场景, tag=WARP, enabled=true
 https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=新国手动场景, tag=TikTok, enabled=true
-https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=美国手动场景, tag=AI, enabled=true
+https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=AI手动场景, tag=AI, enabled=true
 https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr, policy=全球手动场景, tag=Speedtest Intl, enabled=true
 https://rule.kelee.one/Loon/Netflix.lsr, policy=新国手动场景, tag=Netflix, enabled=true
 https://kelee.one/Tool/Loon/Lsr/LAN_SPLITTER.lsr, policy=DIRECT, tag=LAN, enabled=true
