@@ -34,9 +34,12 @@
 # 10. [Remote Proxy] 内嵌 Sub-Store 的 loon 集合订阅（家里 1.3:3005，target=Loon；与 MSM
 #     用的 custom 集合同源，仅 WARP 节点换成 cf-loon 的局域网地址版）：在家局域网直拉、
 #     在外经 Tailscale 回家拉；链接含密钥路径且本仓库公开，Smith 知悉风险后决定内嵌
+# 11. 新增「省流」层：省流节点过滤器（按 0.1–0.5 倍率/低倍率/省流/大流量 筛选、排除 🏠，
+#     与家里 MSM 的「省流节点」组同一判据）+ 省流自动场景/策略（url-test 自动选最快）；
+#     不绑规则集，供手动选用（蜂窝下大流量走它只扣 0.1 倍额度）
 #
 # 本机化参数（2026-11-21 已按 Smith 家里环境落地）：
-#  - 场景 SSID：HOMEair（共 19 处：18 处场景组 + 1 处 [Host]）
+#  - 场景 SSID：HOMEair（共 20 处：19 处场景组 + 1 处 [Host]）
 #    连上家里 Wi-Fi 时全部场景塌缩为 DIRECT，流量交给家里网关/MSM
 #  - [Host] 中 HOMEair 的 DNS：192.168.1.2（主网关 RouterOS）
 #    家里 DNS 链：RouterOS(.2) 转发给 MosDNS(.251)，会下发 Fake-IP
@@ -86,6 +89,7 @@ SubStore = http://192.168.1.3:3005/cD7wiTGitLyoBdEguAnFWmqCpHKwhLQh4opXfFhFCEpmY
 全球节点=NameRegex, FilterKey="^(?=.*(.))(?!.*((?i)群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|超时|收藏|福利|邀请|好友|失联|(\b(USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|Traffic)(\d+)?\b|(\d{4}-\d{2}-\d{2}|\dG)))).*$"
 家宽节点=NameRegex, FilterKey="^(?=.*((?i)🏠|家宽|住宅)).*$"
 WARP节点=NameRegex, FilterKey="^(?=.*((?i)WARP)).*$"
+省流节点=NameRegex, FilterKey="^(?=.*((?i)0\.[1-5]|低倍率|省流|大流量))(?!.*🏠).*$"
 
 [Proxy Group]
 # --------------------------------
@@ -108,6 +112,7 @@ WARP手动场景=ssid, default=WARP手动策略, cellular=WARP手动策略, "HOM
 韩国自动场景=ssid, default=韩国自动策略, cellular=韩国自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 新国自动场景=ssid, default=新国自动策略, cellular=新国自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 美国自动场景=ssid, default=美国自动策略, cellular=美国自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
+省流自动场景=ssid, default=省流自动策略, cellular=省流自动策略, "HOMEair"=DIRECT, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SSID.png
 # --------------------------------
 # 地区策略
 香港手动策略=select, 香港节点, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png
@@ -128,6 +133,7 @@ WARP手动策略=select, 兜底后备策略, WARP节点, img-url=https://raw.git
 韩国自动策略=url-test, 韩国节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/KR.png
 新国自动策略=url-test, 新国节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png
 美国自动策略=url-test, 美国节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png
+省流自动策略=url-test, 省流节点, interval=60, tolerance=50, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png
 
 # --------------------------------
 # 兜底策略后备
