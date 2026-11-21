@@ -1,0 +1,17 @@
+# 苹果规则集（policy=苹果手动场景）
+# 苹果服务独立成组、可单独选出口（对应 MSM 的「苹果服务」组）
+# 不收 icloud.com.cn：国行 iCloud 由云上贵州运营，保持直连
+DOMAIN-SUFFIX,apple.com
+DOMAIN-SUFFIX,icloud.com
+DOMAIN-SUFFIX,icloud-content.com
+DOMAIN-SUFFIX,me.com
+DOMAIN-SUFFIX,mac.com
+DOMAIN-SUFFIX,apple-cloudkit.com
+DOMAIN-SUFFIX,apple-mapkit.com
+DOMAIN-SUFFIX,apple-livephotoskit.com
+DOMAIN-SUFFIX,apple-dns.net
+DOMAIN-SUFFIX,cdn-apple.com
+DOMAIN-SUFFIX,mzstatic.com
+DOMAIN-SUFFIX,aaplimg.com
+DOMAIN-SUFFIX,apple.news
+DOMAIN-SUFFIX,applemusic.com
